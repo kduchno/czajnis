@@ -1,33 +1,13 @@
 import React, { useState, useMemo } from "react";
 import "./Menu.css";
-
-interface MenuItem {
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
-
-const menuItems: MenuItem[] = [
-  {
-    name: "Pizza Margherita",
-    description: "Klasyczna pizza z sosem pomidorowym, mozzarellą i bazylią.",
-    price: 250,
-    image: "https://example.com/pizza-margherita.jpg",
-  },
-  {
-    name: "Spaghetti Carbonara",
-    description:
-      "Makaron spaghetti z sosem śmietanowym, jajkami, boczkiem i parmezanem.",
-    price: 30,
-    image: "https://example.com/spaghetti-carbonara.jpg",
-  },
-];
+import {menuItems, MenuItem} from "./Data.ts"
 
 const Menu: React.FC<{}> = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof MenuItem>("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("Empty: ");
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
 
   const handleCheckboxChange = (index: number) => {
@@ -41,9 +21,15 @@ const Menu: React.FC<{}> = () => {
   };
 
   const filteredItems = useMemo(() => {
-    return menuItems.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return menuItems.filter((item) => {
+      const lowerCaseName = item.name.toLowerCase();
+      const lowerCaseDescription = item.description.toLowerCase();
+      return (
+        lowerCaseName.includes(lowerCaseSearchTerm) ||
+        lowerCaseDescription.includes(lowerCaseSearchTerm)
+      );
+    });
   }, [menuItems, searchTerm]);
 
   const sortedItems = useMemo(() => {
@@ -73,11 +59,24 @@ const Menu: React.FC<{}> = () => {
     }
   };
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    // Tworzenie wiadomości
+    let emailBody = "Wybrane pieseły:\n";
+    Array.from(selectedItems).map((index) => {
+      emailBody += `${sortedItems[index].name} - ${sortedItems[index].price} zł \r\n`;
+    });
+    setMessage(emailBody);
+    // Tutaj możesz dodać logikę wysyłania maila, np. za pomocą fetch lub axios
+    console.log("Wysłano ", emailBody, " do:", email);
+  };
+
   return (
     <div>
       <input
         type="text"
-        placeholder="Szukaj po nazwie..."
+        placeholder="Choose your dog"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -85,9 +84,8 @@ const Menu: React.FC<{}> = () => {
       <table>
         <thead>
           <tr>
-            <th onClick={() => handleSort("name")}>
-              Nazwa {sortKey === "name" && (sortOrder === "asc" ? "▲" : "▼")}{" "}
-            </th>
+            <th></th>
+            <th>Nazwa</th>
             <th>Opis</th>
             <th onClick={() => handleSort("price")}>
               Cena {sortKey === "price" && (sortOrder === "asc" ? "▲" : "▼")}{" "}
@@ -122,13 +120,25 @@ const Menu: React.FC<{}> = () => {
 
       {/* Wyświetlamy listę zaznaczonych elementów (opcjonalne) */}
       <div>
-        Wybrane elementy:
         <ul>
           {Array.from(selectedItems).map((index) => (
             <li key={index}>{sortedItems[index].name}</li>
           ))}
         </ul>
       </div>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email for order confirmation and payment info: </label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <button type="submit">Order doggie</button>
+        {message && <p>{message}</p>}
+      </form>
     </div>
   );
 };
