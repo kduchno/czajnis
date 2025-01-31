@@ -1,0 +1,51 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #333; /* Ciemniejsze tło tabeli */
+    color: #eee; /* Jaśniejsza czcionka w tabeli */
+  }
+  
+  th,
+  td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #555; /* Ciemniejsze linie oddzielające wiersze */
+    background-color: #444; /* Ciemniejsze tło komórek */
+  }
+  
+  th {
+    background-color: #555; /* Jeszcze ciemniejsze tło nagłówka */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #eee; /* Jaśniejsza czcionka w nagłówku */
+  }
+  
+  th:hover {
+    background-color: #666; /* Jaśniejsze tło nagłówka po najechaniu myszą */
+  }
+  
+  tr:hover {
+    background-color: #666; /* Delikatne jaśniejsze tło wiersza po najechaniu myszą */
+  }
+  
+  img {
+    max-width: 80px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  input[type='text'] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #555; /* Ciemniejsze obramowanie inputu */
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #444; /* Ciemniejsze tło inputu */
+    color: #eee; /* Jaśniejsza czcionka w inpucie */
+  }

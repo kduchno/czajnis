@@ -4,7 +4,7 @@ import Menu from "./components/Menu/Menu";
 const App: React.FC = () => {
   return (
     <div>
-      <h1>Menu</h1>
+      <h1>Meeeeeeeenu</h1>
       <Menu />
     </div>
   );

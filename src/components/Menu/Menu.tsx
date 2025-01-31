@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import "./Menu.css";
 
 interface MenuItem {
   name: string;
@@ -11,7 +12,7 @@ const menuItems: MenuItem[] = [
   {
     name: "Pizza Margherita",
     description: "Klasyczna pizza z sosem pomidorowym, mozzarellą i bazylią.",
-    price: 25,
+    price: 250,
     image: "https://example.com/pizza-margherita.jpg",
   },
   {
@@ -25,8 +26,19 @@ const menuItems: MenuItem[] = [
 
 const Menu: React.FC<{}> = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortKey, setSortKey] = useState<keyof MenuItem>("name");
+  const [sortKey, setSortKey] = useState<keyof MenuItem>("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+
+  const handleCheckboxChange = (index: number) => {
+    const newSelectedItems = new Set(selectedItems);
+    if (newSelectedItems.has(index)) {
+      newSelectedItems.delete(index);
+    } else {
+      newSelectedItems.add(index);
+    }
+    setSelectedItems(newSelectedItems);
+  };
 
   const filteredItems = useMemo(() => {
     return menuItems.filter((item) =>
@@ -86,6 +98,13 @@ const Menu: React.FC<{}> = () => {
         <tbody>
           {sortedItems.map((item, index) => (
             <tr key={index}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedItems.has(index)}
+                  onChange={() => handleCheckboxChange(index)}
+                />
+              </td>
               <td>{item.name}</td>
               <td>{item.description}</td>
               <td>{item.price} zł</td>
@@ -100,6 +119,16 @@ const Menu: React.FC<{}> = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Wyświetlamy listę zaznaczonych elementów (opcjonalne) */}
+      <div>
+        Wybrane elementy:
+        <ul>
+          {Array.from(selectedItems).map((index) => (
+            <li key={index}>{sortedItems[index].name}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
