@@ -1,14 +1,16 @@
 import React, { useState, useMemo } from "react";
 import "./Menu.css";
-import {menuItems, MenuItem} from "./Data.ts"
+import { menuItems, MenuItem } from "./Data.ts";
+import { EmailOptions, sendEmail } from "../Mailer/Mailer.tsx";
 
 const Menu: React.FC<{}> = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof MenuItem>("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("Empty: ");
+  const [message, setMessage] = useState("");
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
   const handleCheckboxChange = (index: number) => {
     const newSelectedItems = new Set(selectedItems);
@@ -18,6 +20,12 @@ const Menu: React.FC<{}> = () => {
       newSelectedItems.add(index);
     }
     setSelectedItems(newSelectedItems);
+    if (newSelectedItems.size != 0) {
+      setIsSubmitDisabled(false);
+    } else {
+      setIsSubmitDisabled(true);
+      setMessage("");
+    }
   };
 
   const filteredItems = useMemo(() => {
@@ -70,6 +78,15 @@ const Menu: React.FC<{}> = () => {
     setMessage(emailBody);
     // Tutaj możesz dodać logikę wysyłania maila, np. za pomocą fetch lub axios
     console.log("Wysłano ", emailBody, " do:", email);
+    const EmailOpts: EmailOptions = {
+      from: "kduchno@gmail.com",
+      to: "kduchno@gmail.com",
+      subject: "test",
+      text: "test text",
+      html: "<p> Html verions of text </p>",
+    };
+    console.log(EmailOpts);
+    // sendEmail(EmailOpts);
   };
 
   return (
@@ -128,7 +145,9 @@ const Menu: React.FC<{}> = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email for order confirmation and payment info: </label>
+        <label htmlFor="email">
+          Email for order confirmation and payment info:{" "}
+        </label>
         <input
           type="email"
           id="email"
@@ -136,7 +155,9 @@ const Menu: React.FC<{}> = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button type="submit">Order doggie</button>
+        <button type="submit" disabled={isSubmitDisabled}>
+          Order doggie
+        </button>
         {message && <p>{message}</p>}
       </form>
     </div>
