@@ -1,0 +1,10 @@
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh; /* Adjust for nav height */
+}
+.card-center {
+  width: 80%; /* Adjust as needed */
+  max-width: 600px; /* Adjust as needed */
+}

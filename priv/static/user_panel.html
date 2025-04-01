@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Panel</title>
+    <!-- Import Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/user_panel.css">
+    <link rel="stylesheet" href="assets/nav.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-wrapper">
+            <ul class="right">  <li><a href="/"><i class="material-icons">home</i></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- User Panel Content -->
+    <div class="content">
+        <h1>User Panel</h1>
+        <p>Welcome, [Current User]! Here are your orders:</p>
+
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Dish Name</th>
+                    <th>Price</th>
+                    <th>Order Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic order rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <p id="noOrdersMessage" class="no-orders" style="display: none;">
+            You have not placed any orders yet.
+        </p>
+    </div>
+
+    <!-- Materialize CSS JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        // Example data for orders
+        const userOrders = [
+            { dish: "Spaghetti Carbonara", price: "$12", date: "2023-04-01" },
+            { dish: "Caesar Salad", price: "$8", date: "2023-03-28" }
+        ];
+
+        // Populate the orders table
+        const tableBody = document.querySelector("#ordersTable tbody");
+        const noOrdersMessage = document.getElementById("noOrdersMessage");
+
+        if (userOrders.length > 0) {
+            userOrders.forEach(order => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${order.dish}</td>
+                    <td>${order.price}</td>
+                    <td>${order.date}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        } else {
+            noOrdersMessage.style.display = "block"; // Show "No orders" message
+        }
+    </script>
+</body>
+</html>

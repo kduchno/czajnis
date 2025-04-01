@@ -1,0 +1,11 @@
+.container {
+    margin-top: 50px;
+}
+
+.input-field input.invalid {
+    border-bottom: 1px solid red !important;
+    box-shadow: 0 1px 0 0 red !important;
+}
+.input-field label.invalid{
+    color: red !important;
+}
